@@ -5896,6 +5896,7 @@
 	$lang[0][31] = "Theme-Aktivierung fehlgeschlagen.    "
 	$lang[0][32] = "Start 7z"
 	$lang[0][33] = "Status: "
+	$lang[0][34] = "Sprache: "
 	$lang[1][1] = "Your windows version isn´t supported by 7-Zip Theme Manager. The usage may cause unpredictable errors!    "
 	$lang[1][2] = "Your 7-Zip directory couldn´t be found, please select it yourself.    "
 	$lang[1][3] = "Please select your 7-Zip directory...    "
@@ -5904,8 +5905,8 @@
 	$lang[1][6] = 'The required file "7z.dll" couldn´t be found in the specified directory.   ' & @LF & "Please make sure that the file exists and the specified directory is correct.   " & @LF & @LF & "The program will now quit.   "
 	$lang[1][7] = 'The required file "7zFM.exe" couldn´t be found in the specified directory.   ' & @LF & "Please make sure that the file exists and the specified directory is correct.   " & @LF & @LF & "The program will now quit.   "
 	$lang[1][8] = "At least 7-Zip 4.65 is required. Unfortunately your version is older. Please update it.    " & @LF & @LF & "The program will now quit.   "
-	$lang[1][9] = 'The Toolbar Theme "'
-	$lang[1][10] = 'The Filetype Theme "'
+	$lang[1][9] = 'Toolbar Theme '
+	$lang[1][10] = 'Filetype Theme '
 	$lang[1][11] = """ can't be loaded because    " & @LF & "it's incomplete or the file ""theme.ini"" is missing.    "
 	$lang[1][12] = "No Toolbar Themes found.    "
 	$lang[1][13] = "No Filetype Themes found.    "
@@ -5929,6 +5930,7 @@
 	$lang[1][31] = "Theme activation failed.    "
 	$lang[1][32] = "Start 7z"
 	$lang[1][33] = "Status: "
+	$lang[1][34] = "Language: "
 	$lang[2][1] = "La sua versione di Windows non è supportata dal 7-Zip Theme Manager.    " & @LF & "L'uso puo causare gravi errori!    "
 	$lang[2][2] = "La cartella di 7-Zip non è stata trovata, si prega di selezionarla.    "
 	$lang[2][3] = "Si prega di selezionare la cartella di 7-Zip...    "
@@ -5937,8 +5939,8 @@
 	$lang[2][6] = 'Il file "7z.dll" non esiste nella cartella specificata.   ' & @LF & "Assicuri che il file è presente e che la cartella specificata è corretta.   " & @LF & @LF & "Il programma ora si chiude.   "
 	$lang[2][7] = 'Il file "7zFM.exe" non esiste nella cartella specificata.   ' & @LF & "Assicuri che il file è presente e che la cartella specificata è corretta.   " & @LF & @LF & "Il programma ora si chiude.   "
 	$lang[2][8] = "Si richiede almeno 7-Zip 4.65. La sua versione non é attuale, si prega di aggiornarla.    " & @LF & @LF & "Il programma ora si chiude.   "
-	$lang[2][9] = 'Il Toolbar Theme "'
-	$lang[2][10] = 'Il Filetype Theme "'
+	$lang[2][9] = 'Il Toolbar Theme'
+	$lang[2][10] = 'Il Filetype Theme'
 	$lang[2][11] = '" non può essere caricato,    ' & @LF & 'perché è incompleto o manca il file "theme.ini".    '
 	$lang[2][12] = "Nessun Toolbar Theme trovato.    "
 	$lang[2][13] = "Nessun Filetype Theme trovato.    "
@@ -5962,6 +5964,7 @@
 	$lang[2][31] = "L'attivazione del Theme è fallito.    "
 	$lang[2][32] = "Start 7z"
 	$lang[2][33] = "Status: "
+	$lang[2][34] = "Lingua: "
 	$lang[3][1] = "Ваша версия Windows не поддерживается 7-Zip Theme Manager.    " & @LF & "Использование может привести к серьезным ошибкам!    "
 	$lang[3][2] = "Папка 7-Zip не найдена, пожалуйста, выберите её.    "
 	$lang[3][3] = "Пожалуйста, выберите папку 7-Zip...    "
@@ -5995,6 +5998,7 @@
 	$lang[3][31] = "Ошибка активации темы.    "
 	$lang[3][32] = "Запустить 7z    "
 	$lang[3][33] = "Статус: "
+	$lang[3][34] = "Язык: "
 
 #EndRegion incldues
 ###
@@ -6023,7 +6027,7 @@
 								ExitLoop
 							Case "English"
 								Dim $ls = 1
-								IniWrite("Re7zTM .ini", "Re7zTM ", "Language", "1")
+								IniWrite($iniFilePath, "Re7zTM ", "Language", "1")
 								GUIDelete($window_ls)
 								ExitLoop
 							Case "Italian"
@@ -6291,23 +6295,29 @@
 ###
 #Region maingui_build
 	Dim $var_maingui_preview_active = 0
-	$window_maingui = GUICreate("Re7-Zip Theme Manager 2.2", 613, 440, -1, -1)
+	$window_maingui = GUICreate("Re7-Zip Theme Manager 2.2", 613, 450, -1, -1)
 	$radio_maingui_toolbar = GUICtrlCreateRadio($lang[$ls][9], 3, 3, 145, 25)
 	$radio_maingui_filetype = GUICtrlCreateRadio($lang[$ls][10], 3, 25, 150, 25)
 	$list_maingui_themes = GUICtrlCreateList("", 8, 52, 145, 251, BitOR($lbs_sort, $ws_vscroll))
 	$button_maingui_activate = GUICtrlCreateButton($lang[$ls][14], 8, 316, 147, 22)
 	$button_maingui_sfx = GUICtrlCreateButton($lang[$ls][16], 8, 341, 147, 22)
 	$button_maingui_run_7z = GUICtrlCreateButton($lang[$ls][32], 8, 366, 147, 22)
-	$button_maingui_close = GUICtrlCreateButton($lang[$ls][17], 8, 391, 147, 22)
+	$button_maingui_close = GUICtrlCreateButton($lang[$ls][17],  8, 416, 147, 22 )
+	$btn_change_lng = GUICtrlCreateButton($lang[$ls][34], 8, 391, 147, 22)
 	;~ $button_maingui_update = GUICtrlCreateButton($lang[$ls][32], 8, 417, 147, 22)
 	$img_maingui_preview = GUICtrlCreatePic("", 168, 24, 430, 280, $ws_border)
 	$label_maingui_no_preview = GUICtrlCreateLabel($lang[$ls][18], 168, 24, 432, 282, BitOR($ss_center, $ss_centerimage, $ws_border))
 	;~ GUICtrlCreateLabel(, 128, 5, 300, 18, $ss_right)
-	$about = GUICtrlCreateLabel("Maik ""KillerCookie"" Keller and Marco ""MAD'S evilution""", 168, 424, 268, 17)
+	$about = GUICtrlCreateLabel("Re7zTM(2023)", 168, 430, 250, 20, $SS_CENTER)
+	GUICtrlSetOnEvent($about, "about_msg") 
+	GUICtrlSetTip($about, "Go to Github")
+	GUICtrlSetFont($about, 8, 400, 0, "Arial")
+	GUICtrlSetColor($about, 0x0078D7)
+	GUISetState(@SW_SHOW)
+	GUICtrlSetCursor($about,0) 
 	$static_status = GUICtrlCreateLabel($lang[$ls][33], 168, 6, 63, 17)
 	$status = GUICtrlCreateLabel("", 240, 8, 312, 16)
 	GUICtrlSetFont(-1, 8, 400, 0, "Arial")
-	GUICtrlCreateLabel("www.7zTM.de.vu", 510, 5, 90, 18, $ss_right)
 	GUICtrlSetFont(-1, 8, 800, 0, "Arial")
 	GUICtrlCreateGroup($lang[$ls][19], 168, 312, 433, 105)
 	GUICtrlCreateLabel($lang[$ls][20], 176, 330, 45, 16)
@@ -6324,10 +6334,15 @@
 	$input_maingui_info_website = GUICtrlCreateInput("", 400, 389, 193, 21, BitOR($es_autohscroll, $es_readonly))
 	GUICtrlSetState($radio_maingui_toolbar, $gui_checked)
 	GUICtrlSetData($list_maingui_themes, $var_maingui_themelist_toolbar)
+
+
+	GUICtrlSetOnEvent($btn_change_lng, "change_lng")
+
 	;~ If fn_update("check") = 1 Then GUICtrlSetBkColor($button_maingui_update, 65407)
 	GUISetState(@SW_SHOW)
 #EndRegion maingui_build
 ###
+
 #Region maingui_handle
 	Dim $var_maingui_msg
 	Dim $var_maingui_temp
@@ -6376,13 +6391,67 @@
 				Case $var_maingui_msg = $gui_event_close
 					Exit
 				Case $var_maingui_msg = $button_maingui_run_7z
-					if FileExists($var_file_7zfm) Then Run($var_file_7zfm, "", @SW_SHOW) 
+					if FileExists($var_file_7zfm) Then Run($var_file_7zfm, "", @SW_SHOW)
+				Case $var_maingui_msg = $btn_change_lng
+					change_lng()				
+				Case $var_maingui_msg = $about
+					about_msg()
 			EndSwitch
 		EndIf
 	WEnd
 #EndRegion maingui_handle
 ###
 #Region functions
+
+    Func change_lng()
+		Dim $window_ls1 = GUICreate("Re7zTM  Startup", 267, 100, -1, -1, -1, $ws_ex_topmost)
+		Dim $button_ls_ok = GUICtrlCreateButton("OK", 168, 38, 91, 25, 0)
+		Dim $combo_ls_languagelist = GUICtrlCreateCombo("English", 8, 40, 155, 25, $cbs_dropdownlist)
+		GUICtrlSetData($combo_ls_languagelist, "German|Italian|Russian")
+		GUICtrlCreateLabel("Please select your language... Need restart", 8, 8, 210, 17)
+		GUISetState(@SW_SHOW)
+		Dim $var_ls_msg
+		While 1
+			$var_ls_msg = GUIGetMsg()
+			If $var_ls_msg <> 0 Then
+				Switch $var_ls_msg
+					Case $button_ls_ok
+						Switch GUICtrlRead($combo_ls_languagelist)
+							Case "German"
+								Dim $ls = 0
+								IniWrite($iniFilePath, "Re7zTM ", "Language", "0")
+								GUIDelete($window_ls1)
+								ExitLoop
+							Case "English"
+								Dim $ls = 1
+								IniWrite($iniFilePath, "Re7zTM ", "Language", "1")
+								GUIDelete($window_ls1)
+								ExitLoop
+							Case "Italian"
+								Dim $ls = 2
+								IniWrite($iniFilePath, "Re7zTM ", "Language", "2")
+								GUIDelete($window_ls1)
+								ExitLoop
+							Case "Russian"
+								Dim $ls = 3
+								IniWrite($iniFilePath, "Re7zTM ", "Language", "3")
+								GUIDelete($window_ls1)
+								ExitLoop
+						EndSwitch
+					Case $gui_event_close
+						Run(@ComSpec&" /c "&'TIMEOUT /T 1 & START "" "'&@ScriptFullPath&'"', "", @SW_HIDE)
+						Exit
+				EndSwitch
+			EndIf
+		WEnd
+		
+		Run(@ComSpec&" /c "&'TIMEOUT /T 1 & START "" "'&@ScriptFullPath&'"', "", @SW_HIDE)
+	Exit
+	EndFunc
+
+	Func about_msg()
+		ShellExecute('https://github.com/zloisupport/Re7zTM') ; open web site when clicking label
+	EndFunc
 
 	Func fn_update($action)
 		Switch $action
