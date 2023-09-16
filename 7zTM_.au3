@@ -6060,10 +6060,37 @@
 #Region search
 	If $iFileExists Then
 		Dim $var_file_7zfm = IniRead($iniFilePath, "7Z", "7zfm", "")
-		Dim $var_path_7z = IniRead($iniFilePath, "7Z", "Path", "")
+		Dim $var_path_7z = IniRead($iniFilePath, "7Z", "Path", "") 
 		Dim $var_file_7zdll = IniRead($iniFilePath, "7Z", "7zdll","")
 		Dim $var_file_7zconsfx = IniRead($iniFilePath, "7Z", "7zCon","")
 		Dim $var_file_7zsfx = IniRead($iniFilePath, "7Z", "7zsfx","")
+
+		;~ TODO Come up with a better solution than this
+		if $var_path_7z == 0 Or Not FileExists($var_path_7z) Then
+			$var_search_temp = FileSelectFolder($lang[$ls][3], "", 2)
+			If FileExists($var_search_temp & "\7z.dll") AND FileExists($var_search_temp & "\7zFM.exe") Then
+				Dim $var_path_7z = $var_search_temp
+				Dim $var_file_7zdll = $var_path_7z & "\7z.dll"
+				Dim $var_file_7zfm = $var_path_7z & "\7zFM.exe"
+				Dim $var_file_7zconsfx = $var_path_7z & "\7zCon.sfx"
+				IniWrite($iniFilePath, "7Z", "7zfm", $var_file_7zfm)
+				IniWrite($iniFilePath, "7Z", "7zdll", $var_file_7zdll)
+				IniWrite($iniFilePath, "7Z", "Path", $var_path_7z )
+				IniWrite($iniFilePath, "7Z", "7zCon", $var_file_7zconsfx )
+			Else
+				Select 
+					Case $var_search_temp = ""
+						Exit
+					Case NOT FileExists($var_search_temp & "\7z.dll")
+						MsgBox(262144 + 16, "7zTM Startup", $lang[$ls][6])
+						Exit
+					Case NOT FileExists($var_search_temp & "\7zFM.exe")
+						MsgBox(262144 + 16, "7zTM Startup", $lang[$ls][7])
+						Exit
+				EndSelect
+			EndIf
+		Endif
+
 	Else
 		Dim $var_search = 0
 		If FileExists(RegRead("HKEY_CURRENT_USER\SOFTWARE\7-zip", "Path") & "\7z.dll") AND FileExists(RegRead("HKEY_CURRENT_USER\SOFTWARE\7-zip", "Path") & "\7zFM.exe") AND $var_search = 0 Then
@@ -6116,6 +6143,8 @@
 			IniWrite($iniFilePath, "7Z", "Path", $var_path_7z )
 			IniWrite($iniFilePath, "7Z", "7zCon", $var_file_7zconsfx )
 		EndIf
+
+
 		Dim $var_search_ok = 0
 		Dim $var_search_temp = 0
 		
