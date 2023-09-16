@@ -5602,7 +5602,7 @@
 	Global Const $cbs_autohscroll = 64
 	Global Const $cbs_disablenoscroll = 2048
 	Global Const $cbs_dropdown = 2
-	Global Const $cbs_dropdownlist = 3
+	Global Const $cbs_dropdownlist = 3										
 	Global Const $cbs_hasstrings = 512
 	Global Const $cbs_lowercase = 16384
 	Global Const $cbs_nointegralheight = 1024
@@ -5796,6 +5796,9 @@
 	Global Const $__editconstant_ws_hscroll = 1048576
 	Global Const $gui_ss_default_edit = BitOR($es_wantreturn, $__editconstant_ws_vscroll, $__editconstant_ws_hscroll, $es_autovscroll, $es_autohscroll)
 	Global Const $gui_ss_default_input = BitOR($es_left, $es_autohscroll)
+	Global Const $iniFilePath = @ScriptDir & "/7zTM.ini"
+    Global $iFileExists = FileExists($iniFilePath)
+
 
 	Func _processgetname($i_pid)
 		If NOT ProcessExists($i_pid) Then Return SetError(1, 0, "")
@@ -5950,18 +5953,49 @@
 	$lang[2][29] = "Completato ...    "
 	$lang[2][30] = "Il Theme è stato attivato.    "
 	$lang[2][31] = "L'attivazione del Theme è fallito.    "
+	$lang[3][1] = "Ваша версия Windows не поддерживается 7-Zip Theme Manager.    " & @LF & "Использование может привести к серьезным ошибкам!    "
+	$lang[3][2] = "Папка 7-Zip не найдена, пожалуйста, выберите её.    "
+	$lang[3][3] = "Пожалуйста, выберите папку 7-Zip...    "
+	$lang[3][4] = "Следующая директория была определена как ваша директория 7-Zip:   "
+	$lang[3][5] = "Верно?"
+	$lang[3][6] = 'Файл "7z.dll" отсутствует в указанной папке.   ' & @LF & "Убедитесь, что файл присутствует и указанная папка верна.   " & @LF & @LF & "Программа теперь будет закрыта.   "
+	$lang[3][7] = 'Файл "7zFM.exe" отсутствует в указанной папке.   ' & @LF & "Убедитесь, что файл присутствует и указанная папка верна.   " & @LF & @LF & "Программа теперь будет закрыта.   "
+	$lang[3][8] = "Требуется как минимум 7-Zip 4.65. Ваша версия устарела, пожалуйста, обновите её.    " & @LF & @LF & "Программа теперь будет закрыта.   "
+	$lang[3][9] = 'Тема панели'
+	$lang[3][10] = 'Тема типов файлов'
+	$lang[3][11] = '" не может быть загружена,    ' & @LF & 'потому что она неполная или отсутствует файл "theme.ini".    '
+	$lang[3][12] = "Темы для панели не найдены.    "
+	$lang[3][13] = "Темы для типов файлов не найдены.    "
+	$lang[3][14] = "Активировать тему"
+	$lang[3][15] = "Обновить программу/темы"
+	$lang[3][16] = "Изменить значок SFX"
+	$lang[3][17] = "Закрыть"
+	$lang[3][18] = "Предварительный просмотр недоступен."
+	$lang[3][19] = "Информация"
+	$lang[3][20] = "Название"
+	$lang[3][21] = "Автор"
+	$lang[3][22] = "Лицензия"
+	$lang[3][23] = "Веб-сайт"
+	$lang[3][24] = "Доступна обновленная версия. Хотите посетить сайт загрузки?    "
+	$lang[3][25] = "Новая версия не найдена.    "
+	$lang[3][26] = 'Не найдены файлы "7z.sfx" и "7zCon.sfx".' & @LF & "Пожалуйста, посетите веб-сайт 7-Zip Theme Manager и свяжитесь с автором.    "
+	$lang[3][27] = "Похоже, 7-Zip уже используется. Пожалуйста, закройте 7-Zip.    "
+	$lang[3][28] = "Идет изменение файлов...    "
+	$lang[3][29] = "Завершено...    "
+	$lang[3][30] = "Тема активирована.    "
+	$lang[3][31] = "Ошибка активации темы.    "
+
 #EndRegion incldues
 ###
 #Region language
-	Local Const $iniFilePath = @ScriptDir & "/7zTM.ini"
-    Local $iFileExists = FileExists($iniFilePath)
+
 	If $iFileExists Then
 		Dim $ls = IniRead($iniFilePath, "7zTM", "Language", "1")
 	Else
 		Dim $window_ls = GUICreate("7zTM Startup", 267, 79, -1, -1, -1, $ws_ex_topmost)
 		Dim $button_ls_ok = GUICtrlCreateButton("OK", 168, 38, 81, 25, 0)
 		Dim $combo_ls_languagelist = GUICtrlCreateCombo("English", 8, 40, 145, 25, $cbs_dropdownlist)
-		GUICtrlSetData($combo_ls_languagelist, "German|Italian")
+		GUICtrlSetData($combo_ls_languagelist, "German|Italian|Russian")
 		GUICtrlCreateLabel("Please select your language...", 8, 8, 146, 17)
 		GUISetState(@SW_SHOW)
 		Dim $var_ls_msg
@@ -5984,6 +6018,11 @@
 							Case "Italian"
 								Dim $ls = 2
 								IniWrite($iniFilePath, "7zTM", "Language", "2")
+								GUIDelete($window_ls)
+								ExitLoop
+							Case "Russian"
+								Dim $ls = 3
+								IniWrite($iniFilePath, "7zTM", "Language", "3")
 								GUIDelete($window_ls)
 								ExitLoop
 						EndSwitch
@@ -6068,17 +6107,20 @@
 	EndIf
 	Dim $var_search_ok = 0
 	Dim $var_search_temp = 0
+	
 	If $var_search = 0 Then
 		MsgBox(262144 + 48, "7zTM Startup", $lang[$ls][2])
 	Else
 		$var_search_ok = MsgBox(262144 + 32 + 4, "7zTM Startup", $lang[$ls][4] & @LF & @LF & $var_path_7z & @LF & @LF & $lang[$ls][5])
 	EndIf
+
 	If $var_search = 0 OR $var_search_ok <> 6 Then
 		$var_search_temp = FileSelectFolder($lang[$ls][3], "", 2)
 		If FileExists($var_search_temp & "\7z.dll") AND FileExists($var_search_temp & "\7zFM.exe") Then
 			Dim $var_path_7z = $var_search_temp
 			Dim $var_file_7zdll = $var_path_7z & "\7z.dll"
 			Dim $var_file_7zfm = $var_path_7z & "\7zFM.exe"
+			
 		Else
 			Select 
 				Case $var_search_temp = ""
@@ -6195,8 +6237,8 @@
 #Region maingui_build
 	Dim $var_maingui_preview_active = 0
 	$window_maingui = GUICreate("7-Zip Theme Manager 2.1", 613, 426, -1, -1)
-	$radio_maingui_toolbar = GUICtrlCreateRadio("Toolbar Themes", 8, 3, 97, 25)
-	$radio_maingui_filetype = GUICtrlCreateRadio("Filetype Themes", 8, 25, 97, 25)
+	$radio_maingui_toolbar = GUICtrlCreateRadio($lang[$ls][9], 3, 3, 145, 25)
+	$radio_maingui_filetype = GUICtrlCreateRadio($lang[$ls][10], 3, 25, 150, 25)
 	$list_maingui_themes = GUICtrlCreateList("", 8, 52, 145, 251, BitOR($lbs_sort, $ws_vscroll))
 	$button_maingui_activate = GUICtrlCreateButton($lang[$ls][14], 8, 316, 147, 22)
 	$button_maingui_update = GUICtrlCreateButton($lang[$ls][15], 8, 341, 147, 22)
@@ -6209,13 +6251,13 @@
 	GUICtrlCreateLabel("www.7zTM.de.vu", 510, 5, 90, 18, $ss_right)
 	GUICtrlSetFont(-1, 8, 800, 0, "Arial")
 	GUICtrlCreateGroup($lang[$ls][19], 168, 312, 433, 105)
-	GUICtrlCreateLabel($lang[$ls][20], 176, 330, 29, 16)
+	GUICtrlCreateLabel($lang[$ls][20], 176, 330, 45, 16)
 	GUICtrlSetFont(-1, 7, 400, 0, "Arial")
-	GUICtrlCreateLabel($lang[$ls][21], 176, 373, 31, 16)
+	GUICtrlCreateLabel($lang[$ls][21], 176, 373, 56, 16)
 	GUICtrlSetFont(-1, 7, 400, 0, "Arial")
-	GUICtrlCreateLabel($lang[$ls][22], 400, 330, 36, 16)
+	GUICtrlCreateLabel($lang[$ls][22], 400, 330, 56, 16)
 	GUICtrlSetFont(-1, 7, 400, 0, "Arial")
-	GUICtrlCreateLabel($lang[$ls][23], 400, 373, 38, 16)
+	GUICtrlCreateLabel($lang[$ls][23], 400, 373, 56, 16)
 	GUICtrlSetFont(-1, 7, 400, 0, "Arial")
 	$input_maingui_info_name = GUICtrlCreateInput("", 176, 346, 193, 21, BitOR($es_autohscroll, $es_readonly))
 	$input_maingui_info_author = GUICtrlCreateInput("", 176, 389, 193, 21, BitOR($es_autohscroll, $es_readonly))
