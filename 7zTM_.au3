@@ -1,10 +1,13 @@
-#Region
-	#AutoIt3Wrapper_Icon=7zTM.ico
-	#AutoIt3Wrapper_OutFile=7zTM.exe
-	#AutoIt3Wrapper_Res_Description=An easy to use 7-Zip toolbar- and filetype theme manager.
-	#AutoIt3Wrapper_Res_Fileversion=2.1.0.0
-	#AutoIt3Wrapper_Res_Language=1031
-	#AutoIt3Wrapper_Run_AU3Check=n
+#Region compile
+	#pragma compile(Out, Re7zTM.exe)
+    #pragma compile(Icon,7zTM.ico)
+	#pragma compile(FileDescription," An easy to use 7-Zip toolbar- and filetype theme manager.")
+	#pragma compile(ProductName, 7zTM)
+	#pragma compile(ProductVersion, 2.2.0.0)
+	#pragma compile(FileVersion, 2.2.0.0) ; 
+	#pragma compile(LegalCopyright, "")
+	#pragma compile(LegalTrademarks, '')
+	#pragma compile(CompanyName, '')
 #EndRegion
 ###
 #Region options
@@ -5891,6 +5894,8 @@
 	$lang[0][29] = "Fertig ...    "
 	$lang[0][30] = "Theme-Aktivierung erfolgreich.    "
 	$lang[0][31] = "Theme-Aktivierung fehlgeschlagen.    "
+	$lang[0][32] = "Start 7z"
+	$lang[0][33] = "Status: "
 	$lang[1][1] = "Your windows version isn´t supported by 7-Zip Theme Manager. The usage may cause unpredictable errors!    "
 	$lang[1][2] = "Your 7-Zip directory couldn´t be found, please select it yourself.    "
 	$lang[1][3] = "Please select your 7-Zip directory...    "
@@ -5922,6 +5927,8 @@
 	$lang[1][29] = "Done ...    "
 	$lang[1][30] = "Theme activation done.    "
 	$lang[1][31] = "Theme activation failed.    "
+	$lang[1][32] = "Start 7z"
+	$lang[1][33] = "Status: "
 	$lang[2][1] = "La sua versione di Windows non è supportata dal 7-Zip Theme Manager.    " & @LF & "L'uso puo causare gravi errori!    "
 	$lang[2][2] = "La cartella di 7-Zip non è stata trovata, si prega di selezionarla.    "
 	$lang[2][3] = "Si prega di selezionare la cartella di 7-Zip...    "
@@ -5953,6 +5960,8 @@
 	$lang[2][29] = "Completato ...    "
 	$lang[2][30] = "Il Theme è stato attivato.    "
 	$lang[2][31] = "L'attivazione del Theme è fallito.    "
+	$lang[2][32] = "Start 7z"
+	$lang[2][33] = "Status: "
 	$lang[3][1] = "Ваша версия Windows не поддерживается 7-Zip Theme Manager.    " & @LF & "Использование может привести к серьезным ошибкам!    "
 	$lang[3][2] = "Папка 7-Zip не найдена, пожалуйста, выберите её.    "
 	$lang[3][3] = "Пожалуйста, выберите папку 7-Zip...    "
@@ -5984,15 +5993,17 @@
 	$lang[3][29] = "Завершено...    "
 	$lang[3][30] = "Тема активирована.    "
 	$lang[3][31] = "Ошибка активации темы.    "
+	$lang[3][32] = "Запустить 7z    "
+	$lang[3][33] = "Статус: "
 
 #EndRegion incldues
 ###
 #Region language
 
 	If $iFileExists Then
-		Dim $ls = IniRead($iniFilePath, "7zTM", "Language", "1")
+		Dim $ls = IniRead($iniFilePath, "Re7zTM", "Language", "1")
 	Else
-		Dim $window_ls = GUICreate("7zTM Startup", 267, 79, -1, -1, -1, $ws_ex_topmost)
+		Dim $window_ls = GUICreate("Re7zTM  Startup", 267, 79, -1, -1, -1, $ws_ex_topmost)
 		Dim $button_ls_ok = GUICtrlCreateButton("OK", 168, 38, 81, 25, 0)
 		Dim $combo_ls_languagelist = GUICtrlCreateCombo("English", 8, 40, 145, 25, $cbs_dropdownlist)
 		GUICtrlSetData($combo_ls_languagelist, "German|Italian|Russian")
@@ -6007,22 +6018,22 @@
 						Switch GUICtrlRead($combo_ls_languagelist)
 							Case "German"
 								Dim $ls = 0
-								IniWrite($iniFilePath, "7zTM", "Language", "0")
+								IniWrite($iniFilePath, "Re7zTM ", "Language", "0")
 								GUIDelete($window_ls)
 								ExitLoop
 							Case "English"
 								Dim $ls = 1
-								IniWrite("7zTM.ini", "7zTM", "Language", "1")
+								IniWrite("Re7zTM .ini", "Re7zTM ", "Language", "1")
 								GUIDelete($window_ls)
 								ExitLoop
 							Case "Italian"
 								Dim $ls = 2
-								IniWrite($iniFilePath, "7zTM", "Language", "2")
+								IniWrite($iniFilePath, "Re7zTM ", "Language", "2")
 								GUIDelete($window_ls)
 								ExitLoop
 							Case "Russian"
 								Dim $ls = 3
-								IniWrite($iniFilePath, "7zTM", "Language", "3")
+								IniWrite($iniFilePath, "Re7zTM ", "Language", "3")
 								GUIDelete($window_ls)
 								ExitLoop
 						EndSwitch
@@ -6054,7 +6065,7 @@
 		Case "WIN_11"
 			$var_compatibility_os = 2
 	EndSwitch
-	If $var_compatibility_os = 0 Then MsgBox(262144 + 48, "7zTM Startup", $lang[$ls][1])
+	If $var_compatibility_os = 0 Then MsgBox(262144 + 48, "Re7zTM  Startup", $lang[$ls][1])
 #EndRegion compatibility_os
 ###
 #Region search
@@ -6082,10 +6093,10 @@
 					Case $var_search_temp = ""
 						Exit
 					Case NOT FileExists($var_search_temp & "\7z.dll")
-						MsgBox(262144 + 16, "7zTM Startup", $lang[$ls][6])
+						MsgBox(262144 + 16, "Re7zTM  Startup", $lang[$ls][6])
 						Exit
 					Case NOT FileExists($var_search_temp & "\7zFM.exe")
-						MsgBox(262144 + 16, "7zTM Startup", $lang[$ls][7])
+						MsgBox(262144 + 16, "Re7zTM  Startup", $lang[$ls][7])
 						Exit
 				EndSelect
 			EndIf
@@ -6149,9 +6160,9 @@
 		Dim $var_search_temp = 0
 		
 		If $var_search = 0 Then
-			MsgBox(262144 + 48, "7zTM Startup", $lang[$ls][2])
+			MsgBox(262144 + 48, "Re7zTM  Startup", $lang[$ls][2])
 		Else
-			$var_search_ok = MsgBox(262144 + 32 + 4, "7zTM Startup", $lang[$ls][4] & @LF & @LF & $var_path_7z & @LF & @LF & $lang[$ls][5])
+			$var_search_ok = MsgBox(262144 + 32 + 4, "Re7zTM  Startup", $lang[$ls][4] & @LF & @LF & $var_path_7z & @LF & @LF & $lang[$ls][5])
 		EndIf
 
 		If $var_search = 0 OR $var_search_ok <> 6 Then
@@ -6169,10 +6180,10 @@
 					Case $var_search_temp = ""
 						Exit
 					Case NOT FileExists($var_search_temp & "\7z.dll")
-						MsgBox(262144 + 16, "7zTM Startup", $lang[$ls][6])
+						MsgBox(262144 + 16, "Re7zTM  Startup", $lang[$ls][6])
 						Exit
 					Case NOT FileExists($var_search_temp & "\7zFM.exe")
-						MsgBox(262144 + 16, "7zTM Startup", $lang[$ls][7])
+						MsgBox(262144 + 16, "Re7zTM  Startup", $lang[$ls][7])
 						Exit
 				EndSelect
 			EndIf
@@ -6189,8 +6200,8 @@
 	If $var_compatibility_7z_version[1] >= 9 Then $var_compatibility_7z = 2
 	If $var_compatibility_7z_version[1] = 9 AND $var_compatibility_7z_version[2] >= 6 Then $var_compatibility_sfx = 1
 	If $var_compatibility_7z = 0 Then
-		MsgBox(262144 + 16, "7zTM Startup", $var_compatibility_7z)
-		MsgBox(262144 + 16, "7zTM Startup", $lang[$ls][8])
+		MsgBox(262144 + 16, "Re7zTM  Startup", $var_compatibility_7z)
+		MsgBox(262144 + 16, "Re7zTM  Startup", $lang[$ls][8])
 		Exit
 	EndIf
 #EndRegion compatibility_7z
@@ -6227,12 +6238,12 @@
 				Case 0
 					$var_maingui_themelist_toolbar = $var_maingui_themelist_toolbar & $array_themeloader_toolbar[$var_themeloader_counter] & "|"
 				Case 1
-					MsgBox(262144 + 48, "7zTM Startup", $lang[$ls][9] & $array_themeloader_toolbar[$var_themeloader_counter] & $lang[$ls][11])
+					MsgBox(262144 + 48, "Re7zTM  Startup", $lang[$ls][9] & $array_themeloader_toolbar[$var_themeloader_counter] & $lang[$ls][11])
 			EndSwitch
 			$var_themeloader_counter += 1
 		WEnd
 	Else
-		MsgBox(262144 + 64, "7zTM Startup", $lang[$ls][12])
+		MsgBox(262144 + 64, "Re7zTM  Startup", $lang[$ls][12])
 	EndIf
 	SetError(0)
 	$array_themeloader_filetype = _filelisttoarray(@ScriptDir & "\filetype\", "*", 2)
@@ -6269,28 +6280,32 @@
 				Case 0
 					$var_maingui_themelist_filetype = $var_maingui_themelist_filetype & $array_themeloader_filetype[$var_themeloader_counter] & "|"
 				Case 1
-					MsgBox(262144 + 48, "7zTM Startup", $lang[$ls][10] & $array_themeloader_filetype[$var_themeloader_counter] & $lang[$ls][11])
+					MsgBox(262144 + 48, "Re7zTM  Startup", $lang[$ls][10] & $array_themeloader_filetype[$var_themeloader_counter] & $lang[$ls][11])
 			EndSwitch
 			$var_themeloader_counter += 1
 		WEnd
 	Else
-		MsgBox(262144 + 64, "7zTM Startup", $lang[$ls][13])
+		MsgBox(262144 + 64, "Re7zTM  Startup", $lang[$ls][13])
 	EndIf
 #EndRegion themeloader
 ###
 #Region maingui_build
 	Dim $var_maingui_preview_active = 0
-	$window_maingui = GUICreate("7-Zip Theme Manager 2.1", 613, 426, -1, -1)
+	$window_maingui = GUICreate("Re7-Zip Theme Manager 2.2", 613, 440, -1, -1)
 	$radio_maingui_toolbar = GUICtrlCreateRadio($lang[$ls][9], 3, 3, 145, 25)
 	$radio_maingui_filetype = GUICtrlCreateRadio($lang[$ls][10], 3, 25, 150, 25)
 	$list_maingui_themes = GUICtrlCreateList("", 8, 52, 145, 251, BitOR($lbs_sort, $ws_vscroll))
 	$button_maingui_activate = GUICtrlCreateButton($lang[$ls][14], 8, 316, 147, 22)
-	$button_maingui_update = GUICtrlCreateButton($lang[$ls][15], 8, 341, 147, 22)
-	$button_maingui_sfx = GUICtrlCreateButton($lang[$ls][16], 8, 366, 147, 22)
+	$button_maingui_sfx = GUICtrlCreateButton($lang[$ls][16], 8, 341, 147, 22)
+	$button_maingui_run_7z = GUICtrlCreateButton($lang[$ls][32], 8, 366, 147, 22)
 	$button_maingui_close = GUICtrlCreateButton($lang[$ls][17], 8, 391, 147, 22)
+	;~ $button_maingui_update = GUICtrlCreateButton($lang[$ls][32], 8, 417, 147, 22)
 	$img_maingui_preview = GUICtrlCreatePic("", 168, 24, 430, 280, $ws_border)
 	$label_maingui_no_preview = GUICtrlCreateLabel($lang[$ls][18], 168, 24, 432, 282, BitOR($ss_center, $ss_centerimage, $ws_border))
-	GUICtrlCreateLabel("Maik ""KillerCookie"" Keller and Marco ""MAD'S evilution""", 128, 5, 300, 18, $ss_right)
+	;~ GUICtrlCreateLabel(, 128, 5, 300, 18, $ss_right)
+	$about = GUICtrlCreateLabel("Maik ""KillerCookie"" Keller and Marco ""MAD'S evilution""", 168, 424, 268, 17)
+	$static_status = GUICtrlCreateLabel($lang[$ls][33], 168, 6, 63, 17)
+	$status = GUICtrlCreateLabel("", 240, 8, 312, 16)
 	GUICtrlSetFont(-1, 8, 400, 0, "Arial")
 	GUICtrlCreateLabel("www.7zTM.de.vu", 510, 5, 90, 18, $ss_right)
 	GUICtrlSetFont(-1, 8, 800, 0, "Arial")
@@ -6309,7 +6324,7 @@
 	$input_maingui_info_website = GUICtrlCreateInput("", 400, 389, 193, 21, BitOR($es_autohscroll, $es_readonly))
 	GUICtrlSetState($radio_maingui_toolbar, $gui_checked)
 	GUICtrlSetData($list_maingui_themes, $var_maingui_themelist_toolbar)
-	If fn_update("check") = 1 Then GUICtrlSetBkColor($button_maingui_update, 65407)
+	;~ If fn_update("check") = 1 Then GUICtrlSetBkColor($button_maingui_update, 65407)
 	GUISetState(@SW_SHOW)
 #EndRegion maingui_build
 ###
@@ -6336,14 +6351,14 @@
 					If GUICtrlRead($list_maingui_themes) <> "" Then
 						fn_get_theme_info(GUICtrlRead($list_maingui_themes), GUICtrlRead($radio_maingui_toolbar))
 					EndIf
-				Case $var_maingui_msg = $button_maingui_update
-					If fn_update("check") = 1 Then
-						Dim $var_maingui_update_answer
-						$var_maingui_update_answer = MsgBox(262144 + 32 + 4, "7-Zip Theme Manager", $lang[$ls][24], 0, $window_maingui)
-						If $var_maingui_update_answer = 6 Then fn_update("do")
-					Else
-						MsgBox(262144 + 64, "7-Zip Theme Manager", $lang[$ls][25], 0, $window_maingui)
-					EndIf
+				;~ Case $var_maingui_msg = $button_maingui_update
+				;~ 	If fn_update("check") = 1 Then
+				;~ 		Dim $var_maingui_update_answer
+				;~ 		$var_maingui_update_answer = MsgBox(262144 + 32 + 4, "7-Zip Theme Manager", $lang[$ls][24], 0, $window_maingui)
+				;~ 		If $var_maingui_update_answer = 6 Then fn_update("do")
+				;~ 	Else
+				;~ 		MsgBox(262144 + 64, "7-Zip Theme Manager", $lang[$ls][25], 0, $window_maingui)
+				;~ 	EndIf
 				Case $var_maingui_msg = $button_maingui_activate
 					If GUICtrlRead($list_maingui_themes) <> "" Then
 						fn_patcher(GUICtrlRead($list_maingui_themes), GUICtrlRead($radio_maingui_toolbar))
@@ -6351,15 +6366,17 @@
 				Case $var_maingui_msg = $button_maingui_sfx
 					If FileExists($var_file_7zsfx) OR FileExists($var_file_7zconsfx) Then
 						$var_maingui_temp = 0
-						$var_maingui_temp = FileOpenDialog("7-Zip Theme Manager", "", "Icons (*.ico)")
+						$var_maingui_temp = FileOpenDialog("Re7-Zip Theme Manager", "", "Icons (*.ico)")
 						If StringInStr($var_maingui_temp, ".ico") <> 0 Then fn_patcher($var_maingui_temp, 9)
 					Else
-						MsgBox(262144 + 16, "7-Zip Theme Manager", $lang[$ls][26], 0, $window_maingui)
+						MsgBox(262144 + 16, "Re7-Zip Theme Manager", $lang[$ls][26], 0, $window_maingui)
 					EndIf
 				Case $var_maingui_msg = $button_maingui_close
 					Exit
 				Case $var_maingui_msg = $gui_event_close
 					Exit
+				Case $var_maingui_msg = $button_maingui_run_7z
+					if FileExists($var_file_7zfm) Then Run($var_file_7zfm, "", @SW_SHOW) 
 			EndSwitch
 		EndIf
 	WEnd
@@ -6406,6 +6423,7 @@
 		GUICtrlSetData($input_maingui_info_author, IniRead(@ScriptDir & $type & $theme & "\theme.ini", "Theme", "author", "Unknown"))
 		GUICtrlSetData($input_maingui_info_licence, IniRead(@ScriptDir & $type & $theme & "\theme.ini", "Theme", "licence", "Unknown"))
 		GUICtrlSetData($input_maingui_info_website, IniRead(@ScriptDir & $type & $theme & "\theme.ini", "Theme", "website", "Unknown"))
+		GUICtrlSetData($status ,  "") 
 		$preview_available = FileExists(@ScriptDir & $type & $theme & "\preview.jpg")
 		Select 
 			Case $preview_available = 1 AND $var_maingui_preview_active = 1
@@ -6440,7 +6458,7 @@
 		If ProcessExists("7zFM.exe") Then
 			Do
 				$answer = 0
-				$answer = MsgBox(262144 + 48 + 5, "7-Zip Theme Manager", $lang[$ls][27], 0, $window_maingui)
+				$answer = MsgBox(262144 + 48 + 5, "Re7-Zip Theme Manager", $lang[$ls][27], 0, $window_maingui)
 				If $answer = 0 OR $answer = 2 Then ExitLoop
 				If NOT ProcessExists("7zFM.exe") Then $answer = 1
 			Until NOT ProcessExists("7zFM.exe")
@@ -6449,7 +6467,7 @@
 			FileInstall("C:\Resourcer.exe", @ScriptDir & "\Resourcer.exe")
 			Switch $type
 				Case 4
-					ProgressOn("7-Zip Theme Manager", "", $lang[$ls][28])
+					ProgressOn("Re7-Zip Theme Manager", "", $lang[$ls][28])
 					Local $var_progress_value = 0
 					Local $var_progress_step = 0
 					Switch $var_compatibility_7z
@@ -6599,7 +6617,7 @@
 					Sleep(2000)
 					ProgressOff()
 				Case 1
-					ProgressOn("7-Zip Theme Manager", "", $lang[$ls][28])
+					ProgressOn("Re7-Zip Theme Manager", "", $lang[$ls][28])
 					RunWait(@ScriptDir & '\Resourcer.exe -op:upd -src:"' & $var_file_7zfm & '" -type:bitmap -name:100 -lang:1033 -file:"' & @ScriptDir & "\toolbar\" & $theme & '\48x36\Add.bmp"')
 					RunWait(@ScriptDir & '\Resourcer.exe -op:upd -src:"' & $var_file_7zfm & '" -type:bitmap -name:101 -lang:1033 -file:"' & @ScriptDir & "\toolbar\" & $theme & '\48x36\Extract.bmp"')
 					ProgressSet(17)
@@ -6623,7 +6641,7 @@
 					Sleep(1000)
 					ProgressOff()
 				Case 9
-					ProgressOn("7-Zip Theme Manager", "", $lang[$ls][28])
+					ProgressOn("Re7-Zip Theme Manager", "", $lang[$ls][28])
 					If FileExists($var_file_7zsfx) Then
 						Switch $var_compatibility_sfx
 							Case 0
@@ -6643,10 +6661,12 @@
 					Sleep(1000)
 					ProgressOff()
 			EndSwitch
-			;~ If FileExists(@ScriptDir & "\Resourcer.exe") Then FileDelete(@ScriptDir & "\Resourcer.exe")
-			MsgBox(262144 + 64, "7-Zip Theme Manager", $lang[$ls][30], 0, $window_maingui)
+			
+			GUICtrlSetData($status ,  $lang[$ls][30]) 
+			GUICtrlSetColor($status, 0xDB7301)
+			GUICtrlSetFont($status, 10, 400, 0, "Tahoma")
 		Else
-			MsgBox(262144 + 48, "7-Zip Theme Manager", $lang[$ls][31], 0, $window_maingui)
+			MsgBox(262144 + 48, "Re7-Zip Theme Manager", $lang[$ls][31], 0, $window_maingui)
 		EndIf
 	EndFunc
 
