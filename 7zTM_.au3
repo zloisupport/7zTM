@@ -5953,37 +5953,48 @@
 #EndRegion incldues
 ###
 #Region language
-	Dim $window_ls = GUICreate("7zTM Startup", 267, 79, -1, -1, -1, $ws_ex_topmost)
-	Dim $button_ls_ok = GUICtrlCreateButton("OK", 168, 38, 81, 25, 0)
-	Dim $combo_ls_languagelist = GUICtrlCreateCombo("English", 8, 40, 145, 25, $cbs_dropdownlist)
-	GUICtrlSetData($combo_ls_languagelist, "German|Italian")
-	GUICtrlCreateLabel("Please select your language...", 8, 8, 146, 17)
-	GUISetState(@SW_SHOW)
-	Dim $var_ls_msg
-	While 1
-		$var_ls_msg = GUIGetMsg()
-		If $var_ls_msg <> 0 Then
-			Switch $var_ls_msg
-				Case $button_ls_ok
-					Switch GUICtrlRead($combo_ls_languagelist)
-						Case "German"
-							Dim $ls = 0
-							GUIDelete($window_ls)
-							ExitLoop
-						Case "English"
-							Dim $ls = 1
-							GUIDelete($window_ls)
-							ExitLoop
-						Case "Italian"
-							Dim $ls = 2
-							GUIDelete($window_ls)
-							ExitLoop
-					EndSwitch
-				Case $gui_event_close
-					Exit
-			EndSwitch
-		EndIf
-	WEnd
+	Local Const $iniFilePath = @ScriptDir & "/7zTM.ini"
+    Local $iFileExists = FileExists($iniFilePath)
+	If $iFileExists Then
+		Dim $ls = IniRead($iniFilePath, "7zTM", "Language", "1")
+	Else
+		Dim $window_ls = GUICreate("7zTM Startup", 267, 79, -1, -1, -1, $ws_ex_topmost)
+		Dim $button_ls_ok = GUICtrlCreateButton("OK", 168, 38, 81, 25, 0)
+		Dim $combo_ls_languagelist = GUICtrlCreateCombo("English", 8, 40, 145, 25, $cbs_dropdownlist)
+		GUICtrlSetData($combo_ls_languagelist, "German|Italian")
+		GUICtrlCreateLabel("Please select your language...", 8, 8, 146, 17)
+		GUISetState(@SW_SHOW)
+		Dim $var_ls_msg
+		While 1
+			$var_ls_msg = GUIGetMsg()
+			If $var_ls_msg <> 0 Then
+				Switch $var_ls_msg
+					Case $button_ls_ok
+						Switch GUICtrlRead($combo_ls_languagelist)
+							Case "German"
+								Dim $ls = 0
+								IniWrite($iniFilePath, "7zTM", "Language", "0")
+								GUIDelete($window_ls)
+								ExitLoop
+							Case "English"
+								Dim $ls = 1
+								IniWrite("7zTM.ini", "7zTM", "Language", "1")
+								GUIDelete($window_ls)
+								ExitLoop
+							Case "Italian"
+								Dim $ls = 2
+								IniWrite($iniFilePath, "7zTM", "Language", "2")
+								GUIDelete($window_ls)
+								ExitLoop
+						EndSwitch
+					Case $gui_event_close
+						Exit
+				EndSwitch
+			EndIf
+		WEnd
+	EndIf
+
+
 #EndRegion Language
 ###
 #Region compatibility_os
