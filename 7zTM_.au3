@@ -5999,6 +5999,10 @@
 			$var_compatibility_os = 2
 		Case "WIN_7"
 			$var_compatibility_os = 2
+		Case "WIN_10"
+			$var_compatibility_os = 2
+		Case "WIN_11"
+			$var_compatibility_os = 2
 	EndSwitch
 	If $var_compatibility_os = 0 Then MsgBox(262144 + 48, "7zTM Startup", $lang[$ls][1])
 #EndRegion compatibility_os
