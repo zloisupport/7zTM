@@ -6058,80 +6058,95 @@
 #EndRegion compatibility_os
 ###
 #Region search
-	Dim $var_search = 0
-	If FileExists(RegRead("HKEY_CURRENT_USER\SOFTWARE\7-zip", "Path") & "\7z.dll") AND FileExists(RegRead("HKEY_CURRENT_USER\SOFTWARE\7-zip", "Path") & "\7zFM.exe") AND $var_search = 0 Then
-		Dim $var_path_7z = RegRead("HKEY_CURRENT_USER\SOFTWARE\7-zip", "Path")
-		$var_search = 1
-	EndIf
-	If FileExists(RegRead("HKEY_LOCAL_MACHINE\SOFTWARE\7-zip", "Path") & "\7z.dll") AND FileExists(RegRead("HKEY_LOCAL_MACHINE\SOFTWARE\7-zip", "Path") & "\7zFM.exe") AND $var_search = 0 Then
-		Dim $var_path_7z = RegRead("HKEY_LOCAL_MACHINE\SOFTWARE\7-zip", "Path")
-		$var_search = 1
-	EndIf
-	If FileExists(EnvGet("ProgramFiles") & "\7-Zip\7z.dll") AND FileExists(EnvGet("ProgramFiles") & "\7-Zip\7zFM.exe") AND $var_search = 0 Then
-		Dim $var_path_7z = EnvGet("ProgramFiles") & "\7-Zip"
-		$var_search = 1
-	EndIf
-	If FileExists(EnvGet("ProgramFiles(x86)") & "\7-Zip\7z.dll") AND FileExists(EnvGet("ProgramFiles(x86)") & "\7-Zip\7zFM.exe") AND $var_search = 0 Then
-		Dim $var_path_7z = EnvGet("ProgramFiles(x86)") & "\7-Zip"
-		$var_search = 1
-	EndIf
-	If FileExists(EnvGet("SystemDrive") & "\Programme\7-Zip\7z.dll") AND FileExists(EnvGet("SystemDrive") & "\Programme\7-Zip\7zFM.exe") AND $var_search = 0 Then
-		Dim $var_path_7z = EnvGet("SystemDrive") & "\Programme\7-Zip"
-		$var_search = 1
-	EndIf
-	If FileExists(EnvGet("SystemDrive") & "\Program Files\7-Zip\7z.dll") AND FileExists(EnvGet("SystemDrive") & "\Program Files\7-Zip\7zFM.exe") AND $var_search = 0 Then
-		Dim $var_path_7z = EnvGet("SystemDrive") & "\Program Files\7-Zip"
-		$var_search = 1
-	EndIf
-	If FileExists(EnvGet("SystemDrive") & "\Program Files (x86)\7-Zip\7z.dll") AND FileExists(EnvGet("SystemDrive") & "\Program Files (x86)\7-Zip\7zFM.exe") AND $var_search = 0 Then
-		Dim $var_path_7z = EnvGet("SystemDrive") & "\Program Files (x86)\7-Zip"
-		$var_search = 1
-	EndIf
-	If FileExists("C:\Programme\7-Zip\7z.dll") AND FileExists("C:\Programme\7-Zip\7zFM.exe") AND $var_search = 0 Then
-		Dim $var_path_7z = "C:\Programme\7-Zip"
-		$var_search = 1
-	EndIf
-	If FileExists("C:\Program Files\7-Zip\7z.dll") AND FileExists("C:\Program Files\7-Zip\7zFM.exe") AND $var_search = 0 Then
-		Dim $var_path_7z = "C:\Program Files\7-Zip"
-		$var_search = 1
-	EndIf
-	If FileExists("C:\Program Files (x86)\7-Zip\7z.dll") AND FileExists("C:\Program Files (x86)\7-Zip\7zFM.exe") AND $var_search = 0 Then
-		Dim $var_path_7z = "C:\Program Files (x86)\7-Zip"
-		$var_search = 1
-	EndIf
-	If $var_search = 1 Then
-		Dim $var_file_7zdll = $var_path_7z & "\7z.dll"
-		Dim $var_file_7zfm = $var_path_7z & "\7zFM.exe"
-		Dim $var_file_7zsfx = $var_path_7z & "\7z.sfx"
-		Dim $var_file_7zconsfx = $var_path_7z & "\7zCon.sfx"
-	EndIf
-	Dim $var_search_ok = 0
-	Dim $var_search_temp = 0
-	
-	If $var_search = 0 Then
-		MsgBox(262144 + 48, "7zTM Startup", $lang[$ls][2])
+	If $iFileExists Then
+		Dim $var_file_7zfm = IniRead($iniFilePath, "7Z", "7zfm", "")
+		Dim $var_path_7z = IniRead($iniFilePath, "7Z", "Path", "")
+		Dim $var_file_7zdll = IniRead($iniFilePath, "7Z", "7zdll","")
+		Dim $var_file_7zconsfx = IniRead($iniFilePath, "7Z", "7zCon","")
+		Dim $var_file_7zsfx = IniRead($iniFilePath, "7Z", "7zsfx","")
 	Else
-		$var_search_ok = MsgBox(262144 + 32 + 4, "7zTM Startup", $lang[$ls][4] & @LF & @LF & $var_path_7z & @LF & @LF & $lang[$ls][5])
-	EndIf
-
-	If $var_search = 0 OR $var_search_ok <> 6 Then
-		$var_search_temp = FileSelectFolder($lang[$ls][3], "", 2)
-		If FileExists($var_search_temp & "\7z.dll") AND FileExists($var_search_temp & "\7zFM.exe") Then
-			Dim $var_path_7z = $var_search_temp
+		Dim $var_search = 0
+		If FileExists(RegRead("HKEY_CURRENT_USER\SOFTWARE\7-zip", "Path") & "\7z.dll") AND FileExists(RegRead("HKEY_CURRENT_USER\SOFTWARE\7-zip", "Path") & "\7zFM.exe") AND $var_search = 0 Then
+			Dim $var_path_7z = RegRead("HKEY_CURRENT_USER\SOFTWARE\7-zip", "Path")
+			$var_search = 1
+		EndIf
+		If FileExists(RegRead("HKEY_LOCAL_MACHINE\SOFTWARE\7-zip", "Path") & "\7z.dll") AND FileExists(RegRead("HKEY_LOCAL_MACHINE\SOFTWARE\7-zip", "Path") & "\7zFM.exe") AND $var_search = 0 Then
+			Dim $var_path_7z = RegRead("HKEY_LOCAL_MACHINE\SOFTWARE\7-zip", "Path")
+			$var_search = 1
+		EndIf
+		If FileExists(EnvGet("ProgramFiles") & "\7-Zip\7z.dll") AND FileExists(EnvGet("ProgramFiles") & "\7-Zip\7zFM.exe") AND $var_search = 0 Then
+			Dim $var_path_7z = EnvGet("ProgramFiles") & "\7-Zip"
+			$var_search = 1
+		EndIf
+		If FileExists(EnvGet("ProgramFiles(x86)") & "\7-Zip\7z.dll") AND FileExists(EnvGet("ProgramFiles(x86)") & "\7-Zip\7zFM.exe") AND $var_search = 0 Then
+			Dim $var_path_7z = EnvGet("ProgramFiles(x86)") & "\7-Zip"
+			$var_search = 1
+		EndIf
+		If FileExists(EnvGet("SystemDrive") & "\Programme\7-Zip\7z.dll") AND FileExists(EnvGet("SystemDrive") & "\Programme\7-Zip\7zFM.exe") AND $var_search = 0 Then
+			Dim $var_path_7z = EnvGet("SystemDrive") & "\Programme\7-Zip"
+			$var_search = 1
+		EndIf
+		If FileExists(EnvGet("SystemDrive") & "\Program Files\7-Zip\7z.dll") AND FileExists(EnvGet("SystemDrive") & "\Program Files\7-Zip\7zFM.exe") AND $var_search = 0 Then
+			Dim $var_path_7z = EnvGet("SystemDrive") & "\Program Files\7-Zip"
+			$var_search = 1
+		EndIf
+		If FileExists(EnvGet("SystemDrive") & "\Program Files (x86)\7-Zip\7z.dll") AND FileExists(EnvGet("SystemDrive") & "\Program Files (x86)\7-Zip\7zFM.exe") AND $var_search = 0 Then
+			Dim $var_path_7z = EnvGet("SystemDrive") & "\Program Files (x86)\7-Zip"
+			$var_search = 1
+		EndIf
+		If FileExists("C:\Programme\7-Zip\7z.dll") AND FileExists("C:\Programme\7-Zip\7zFM.exe") AND $var_search = 0 Then
+			Dim $var_path_7z = "C:\Programme\7-Zip"
+			$var_search = 1
+		EndIf
+		If FileExists("C:\Program Files\7-Zip\7z.dll") AND FileExists("C:\Program Files\7-Zip\7zFM.exe") AND $var_search = 0 Then
+			Dim $var_path_7z = "C:\Program Files\7-Zip"
+			$var_search = 1
+		EndIf
+		If FileExists("C:\Program Files (x86)\7-Zip\7z.dll") AND FileExists("C:\Program Files (x86)\7-Zip\7zFM.exe") AND $var_search = 0 Then
+			Dim $var_path_7z = "C:\Program Files (x86)\7-Zip"
+			$var_search = 1
+		EndIf
+		If $var_search = 1 Then
 			Dim $var_file_7zdll = $var_path_7z & "\7z.dll"
 			Dim $var_file_7zfm = $var_path_7z & "\7zFM.exe"
-			
+			Dim $var_file_7zsfx = $var_path_7z & "\7z.sfx"
+			Dim $var_file_7zconsfx = $var_path_7z & "\7zCon.sfx"
+			IniWrite($iniFilePath, "7Z", "7zfm", $var_file_7zfm)
+			IniWrite($iniFilePath, "7Z", "7zdll", $var_file_7zdll)
+			IniWrite($iniFilePath, "7Z", "Path", $var_path_7z )
+			IniWrite($iniFilePath, "7Z", "7zCon", $var_file_7zconsfx )
+		EndIf
+		Dim $var_search_ok = 0
+		Dim $var_search_temp = 0
+		
+		If $var_search = 0 Then
+			MsgBox(262144 + 48, "7zTM Startup", $lang[$ls][2])
 		Else
-			Select 
-				Case $var_search_temp = ""
-					Exit
-				Case NOT FileExists($var_search_temp & "\7z.dll")
-					MsgBox(262144 + 16, "7zTM Startup", $lang[$ls][6])
-					Exit
-				Case NOT FileExists($var_search_temp & "\7zFM.exe")
-					MsgBox(262144 + 16, "7zTM Startup", $lang[$ls][7])
-					Exit
-			EndSelect
+			$var_search_ok = MsgBox(262144 + 32 + 4, "7zTM Startup", $lang[$ls][4] & @LF & @LF & $var_path_7z & @LF & @LF & $lang[$ls][5])
+		EndIf
+
+		If $var_search = 0 OR $var_search_ok <> 6 Then
+			$var_search_temp = FileSelectFolder($lang[$ls][3], "", 2)
+			If FileExists($var_search_temp & "\7z.dll") AND FileExists($var_search_temp & "\7zFM.exe") Then
+				Dim $var_path_7z = $var_search_temp
+				Dim $var_file_7zdll = $var_path_7z & "\7z.dll"
+				Dim $var_file_7zfm = $var_path_7z & "\7zFM.exe"
+				IniWrite($iniFilePath, "7Z", "7zfm", $var_file_7zfm)
+				IniWrite($iniFilePath, "7Z", "7zdll", $var_file_7zdll)
+				IniWrite($iniFilePath, "7Z", "Path", $var_path_7z )
+				IniWrite($iniFilePath, "7Z", "7zCon", $var_file_7zconsfx )
+			Else
+				Select 
+					Case $var_search_temp = ""
+						Exit
+					Case NOT FileExists($var_search_temp & "\7z.dll")
+						MsgBox(262144 + 16, "7zTM Startup", $lang[$ls][6])
+						Exit
+					Case NOT FileExists($var_search_temp & "\7zFM.exe")
+						MsgBox(262144 + 16, "7zTM Startup", $lang[$ls][7])
+						Exit
+				EndSelect
+			EndIf
 		EndIf
 	EndIf
 #EndRegion search
