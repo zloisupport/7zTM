@@ -5799,7 +5799,7 @@
 	Global Const $__editconstant_ws_hscroll = 1048576
 	Global Const $gui_ss_default_edit = BitOR($es_wantreturn, $__editconstant_ws_vscroll, $__editconstant_ws_hscroll, $es_autovscroll, $es_autohscroll)
 	Global Const $gui_ss_default_input = BitOR($es_left, $es_autohscroll)
-	Global Const $iniFilePath = @ScriptDir & "/7zTM.ini"
+	Global Const $iniFilePath = @ScriptDir & "/Re7zTM.ini"
     Global $iFileExists = FileExists($iniFilePath)
 
 
@@ -5871,8 +5871,8 @@
 	$lang[0][6] = 'Die benötigte Datei "7z.dll" konnte in dem von Ihnen angegebenen Verzeichnis nicht gefunden werden.   ' & @LF & "Bitte stellen Sie sicher, dass die Datei existiert und das angegebene Verzeichnis korrekt ist.   " & @LF & @LF & "Das Programm wird nun beendet.   "
 	$lang[0][7] = 'Die benötigte Datei "7zFM.exe" konnte in dem von Ihnen angegebenen Verzeichnis nicht gefunden werden.   ' & @LF & "Bitte stellen Sie sicher, dass die Datei existiert und das angegebene Verzeichnis korrekt ist.   " & @LF & @LF & "Das Programm wird nun beendet.   "
 	$lang[0][8] = "Es wird mindestens 7-Zip 4.65 benötigt. Ihre Version ist leider älter, bitte aktualisieren Sie diese.    " & @LF & @LF & "Das Programm wird nun beendet.   "
-	$lang[0][9] = 'Das Toolbar Theme "'
-	$lang[0][10] = 'Das Filetype Theme "'
+	$lang[0][9] = 'Das Toolbar Theme'
+	$lang[0][10] = 'Das Filetype Theme'
 	$lang[0][11] = '" kann nicht geladen werden,    ' & @LF & 'da es unvollständig ist oder die Datei "theme.ini" fehlt.    '
 	$lang[0][12] = "Keine Toolbar Themes gefunden.    "
 	$lang[0][13] = "Keine Filetype Themes gefunden.    "
