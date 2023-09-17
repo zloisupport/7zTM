@@ -7,4 +7,5 @@ Language: ENGLISH/ DEUTSCH/ RUSSIAN/ ITALIAN
 
 
 ### Screen
-[![imageban](https://i1.imageban.ru/out/2023/09/16/3b69cb064082dbab0ed9de761710df9d.png)](https://imageban.ru)
+
+[![imageban](https://i6.imageban.ru/out/2023/09/17/04f10ed712ac7531f8852b1c5e9691e5.png)](https://imageban.ru)
