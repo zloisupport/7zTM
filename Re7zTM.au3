@@ -1,10 +1,10 @@
 #Region compile
 	#pragma compile(Out, Re7zTM.exe)
-    #pragma compile(Icon,7zTM.ico)
+    #pragma compile(Icon,Re7zTM.ico)
 	#pragma compile(FileDescription," An easy to use 7-Zip toolbar- and filetype theme manager.")
-	#pragma compile(ProductName, 7zTM)
-	#pragma compile(ProductVersion, 2.2.0.0)
-	#pragma compile(FileVersion, 2.2.0.0) ; 
+	#pragma compile(ProductName, Re7zTM)
+	#pragma compile(ProductVersion, 23.09.17.0)
+	#pragma compile(FileVersion, 23.09.17.0) ; 
 	#pragma compile(LegalCopyright, "")
 	#pragma compile(LegalTrademarks, '')
 	#pragma compile(CompanyName, '')
@@ -5896,7 +5896,7 @@
 	$lang[0][31] = "Theme-Aktivierung fehlgeschlagen.    "
 	$lang[0][32] = "Start 7z"
 	$lang[0][33] = "Status: "
-	$lang[0][34] = "Sprache: "
+	$lang[0][34] = "Sprache"
 	$lang[1][1] = "Your windows version isn´t supported by 7-Zip Theme Manager. The usage may cause unpredictable errors!    "
 	$lang[1][2] = "Your 7-Zip directory couldn´t be found, please select it yourself.    "
 	$lang[1][3] = "Please select your 7-Zip directory...    "
@@ -5930,7 +5930,7 @@
 	$lang[1][31] = "Theme activation failed.    "
 	$lang[1][32] = "Start 7z"
 	$lang[1][33] = "Status: "
-	$lang[1][34] = "Language: "
+	$lang[1][34] = "Language"
 	$lang[2][1] = "La sua versione di Windows non è supportata dal 7-Zip Theme Manager.    " & @LF & "L'uso puo causare gravi errori!    "
 	$lang[2][2] = "La cartella di 7-Zip non è stata trovata, si prega di selezionarla.    "
 	$lang[2][3] = "Si prega di selezionare la cartella di 7-Zip...    "
@@ -5964,7 +5964,7 @@
 	$lang[2][31] = "L'attivazione del Theme è fallito.    "
 	$lang[2][32] = "Start 7z"
 	$lang[2][33] = "Status: "
-	$lang[2][34] = "Lingua: "
+	$lang[2][34] = "Lingua"
 	$lang[3][1] = "Ваша версия Windows не поддерживается 7-Zip Theme Manager.    " & @LF & "Использование может привести к серьезным ошибкам!    "
 	$lang[3][2] = "Папка 7-Zip не найдена, пожалуйста, выберите её.    "
 	$lang[3][3] = "Пожалуйста, выберите папку 7-Zip...    "
@@ -5998,7 +5998,7 @@
 	$lang[3][31] = "Ошибка активации темы.    "
 	$lang[3][32] = "Запустить 7z    "
 	$lang[3][33] = "Статус: "
-	$lang[3][34] = "Язык: "
+	$lang[3][34] = "Язык"
 
 #EndRegion incldues
 ###
@@ -6295,7 +6295,7 @@
 ###
 #Region maingui_build
 	Dim $var_maingui_preview_active = 0
-	$window_maingui = GUICreate("Re7-Zip Theme Manager 2.2", 613, 450, -1, -1)
+	$window_maingui = GUICreate("Re7-Zip Theme Manager 23.17.09", 613, 450, -1, -1)
 	$radio_maingui_toolbar = GUICtrlCreateRadio($lang[$ls][9], 3, 3, 145, 25)
 	$radio_maingui_filetype = GUICtrlCreateRadio($lang[$ls][10], 3, 25, 150, 25)
 	$list_maingui_themes = GUICtrlCreateList("", 8, 52, 145, 251, BitOR($lbs_sort, $ws_vscroll))
