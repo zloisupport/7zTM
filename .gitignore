@@ -2,7 +2,9 @@
 *.dll
 *.exe
 /src/csharp/.vs/Re7zTM
-/src/csharp/packages/Vestris.ResourceLib.2.2.0
 /src/csharp/Re7zTM/bin/Debug
+/src/csharp/Re7zTM/bin/Release
 /src/csharp/Re7zTM/obj/Debug
+/src/csharp/Re7zTM/obj/Release
 /src/au3/Re7zTM.ini
+/src/csharp/Re7zTM/.vs/Re7zTM.csproj.dtbcache.json
