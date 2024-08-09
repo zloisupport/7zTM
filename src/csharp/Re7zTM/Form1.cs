@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 
@@ -136,16 +137,25 @@ namespace Re7zTM
                 listBox1.Items.Add(item.Value);
             }
         }
-
+        public delegate void OperationCompletedHandler();
 
         private void button1_Click(object sender, EventArgs e)
         {
             btnActivate.Enabled = false;
+
+            OperationCompletedHandler callback = () =>
+            {
+                // Включаем кнопку после завершения задачи
+                btnActivate.Invoke((Action)(() => btnActivate.Enabled = true));
+            };
+
+
             if (objType == ElementType.toolbar)
-                resourceHelperDll.ChangeBitmap(objType, selectedTheme);
+                Task.Run(() => resourceHelperDll.ChangeBitmap(objType, selectedTheme, callback));
             else if (objType == ElementType.filetype)
-                resourceHelperDll.ReplaceIcon("ss", selectedTheme);
-            btnActivate.Enabled = true;
+                Task.Run(() => resourceHelperDll.ReplaceIcon("ss", selectedTheme, callback));
+
+
         }
 
 

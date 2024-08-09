@@ -257,6 +257,7 @@
             this.Controls.Add(this.grbxInformation);
             this.Controls.Add(this.grbxTheme);
             this.Controls.Add(this.grboxPreviw);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.HelpButton = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;

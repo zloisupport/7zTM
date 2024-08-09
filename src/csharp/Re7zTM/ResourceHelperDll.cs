@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using static Re7zTM.Form1;
 
 namespace Re7zTM
 {
@@ -21,7 +24,7 @@ namespace Re7zTM
 
         const uint RT_GROUP_ICON = 14;
         const uint RT_ICON = 3;
-
+        public bool status = false;
         private delegate void LongRunningAction();
         /*      
                 private DeviceIndependentBitmap _bitmap;
@@ -47,9 +50,11 @@ namespace Re7zTM
                     return true;
                 }
             }
-            catch {
+            catch
+            {
                 MessageBox.Show("Access denied!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false; }
+                return false;
+            }
         }
 
         public void ChangeBitmap()
@@ -115,7 +120,7 @@ namespace Re7zTM
             BitmapFile bitmapFile = new BitmapFile(newBitmapPath);
             byte[] bitmapData = bitmapFile.Data;
 
-            System.Threading.Thread.Sleep(500);
+
 
             IntPtr hUpdate = BeginUpdateResourceW(exePath, false);
             if (hUpdate == IntPtr.Zero)
@@ -135,8 +140,11 @@ namespace Re7zTM
         }
 
 
-        public void ChangeBitmap(ElementType type, string theme)
+
+
+        public void ChangeBitmap(ElementType type, string theme, OperationCompletedHandler callback)
         {
+            status = false;
             string exePath = Path.Combine(_path7z, "7zFM.exe");
             if (!CheckFileWriteAccess(exePath)) return;
 
@@ -145,7 +153,10 @@ namespace Re7zTM
             var currentDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
             var themeDir = Path.Combine(currentDir, type.ToString(), theme);
-            HashSet<string> uniquePaths = new HashSet<string>();
+
+            ConcurrentQueue<(int, string)> queue = new ConcurrentQueue<(int, string)>();
+
+
 
             int index = 100;
             foreach (var item in bmps)
@@ -153,19 +164,44 @@ namespace Re7zTM
                 string bmpPath = Path.Combine(themeDir, "48x36", item);
                 Console.WriteLine($"{index}\n {bmpPath}");
 
-                ModifyBmpFile(index, bmpPath);
-
+                // ModifyBmpFile(index, bmpPath);
+                queue.Enqueue((index, bmpPath));
                 index++;
             }
             index = 150;
             foreach (var item in bmps)
             {
                 string bmpPath = Path.Combine(themeDir, "24x24", item);
-                ModifyBmpFile(index, bmpPath);
+                // ModifyBmpFile(index, bmpPath);
+
+                queue.Enqueue((index, bmpPath));
                 index++;
             }
+            Task.Run(() => ProcessQueue(queue, callback));
 
         }
+
+
+        private void ProcessQueue(ConcurrentQueue<(int, string)> queue, OperationCompletedHandler callback)
+        {
+            while (queue.TryDequeue(out var item))
+            {
+                ModifyBmpFile(item.Item1, item.Item2);
+            }
+            callback?.Invoke();
+        }
+
+
+
+        private void ProcessQueue(ConcurrentQueue<(int, string, string)> queue, OperationCompletedHandler callback)
+        {
+            while (queue.TryDequeue(out var item))
+            {
+                ModifyIconDll(item.Item1, item.Item2, item.Item3);
+            }
+            callback?.Invoke();
+        }
+
 
         private static void Callback(IAsyncResult ar)
         {
@@ -174,14 +210,15 @@ namespace Re7zTM
 
         }
 
-        public void ReplaceIcon(string exePath, string theme)
+        public void ReplaceIcon(string exePath, string theme, OperationCompletedHandler callback)
         {
-
+            status = false;
             exePath = Path.Combine(_path7z, "7z.dll");
             if (!CheckFileWriteAccess(exePath)) return;
             var currentDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
             var themeDir = Path.Combine(currentDir, ElementType.filetype.ToString(), theme);
+            ConcurrentQueue<(int, string, string)> queue = new ConcurrentQueue<(int, string, string)>();
 
 
             Dictionary<int, string> icons = new Dictionary<int, string>() {
@@ -215,10 +252,11 @@ namespace Re7zTM
                 var iconFile = Path.Combine(themeDir, item.Value);
                 if (File.Exists(iconFile))
                 {
-
-                    ModifyIconDll(item.Key, iconFile, exePath);
+                    queue.Enqueue((item.Key, iconFile, exePath));
+                    //ModifyIconDll(item.Key, iconFile, exePath);
                 }
             }
+            Task.Run(() => ProcessQueue(queue, callback));
         }
 
         static void ModifyIconDll(int index, string iconFile, string exePath)
