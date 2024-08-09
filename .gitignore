@@ -1,3 +1,8 @@
 ﻿7z
 *.dll
 *.exe
+/src/csharp/.vs/Re7zTM
+/src/csharp/packages/Vestris.ResourceLib.2.2.0
+/src/csharp/Re7zTM/bin/Debug
+/src/csharp/Re7zTM/obj/Debug
+/src/au3/Re7zTM.ini
