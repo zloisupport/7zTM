@@ -141,21 +141,31 @@ namespace Re7zTM
 
         private void button1_Click(object sender, EventArgs e)
         {
-            btnActivate.Enabled = false;
+            if (!CheckProccessRunning()) { 
+                btnActivate.Enabled = false;
 
-            OperationCompletedHandler callback = () =>
+                OperationCompletedHandler callback = () =>
+                {
+                    // Включаем кнопку после завершения задачи
+                    btnActivate.Invoke((Action)(() => btnActivate.Enabled = true));
+                };
+
+                if (objType == ElementType.toolbar)
+                    Task.Run(() => resourceHelperDll.ChangeBitmap(objType, selectedTheme, callback));
+                else if (objType == ElementType.filetype)
+                    Task.Run(() => resourceHelperDll.ReplaceIcon("ss", selectedTheme, callback));
+            }else
             {
-                // Включаем кнопку после завершения задачи
-                btnActivate.Invoke((Action)(() => btnActivate.Enabled = true));
-            };
+                MessageBox.Show("Cannot proceed as the 7z is currently open. Please close the archive and try again", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
 
-
-            if (objType == ElementType.toolbar)
-                Task.Run(() => resourceHelperDll.ChangeBitmap(objType, selectedTheme, callback));
-            else if (objType == ElementType.filetype)
-                Task.Run(() => resourceHelperDll.ReplaceIcon("ss", selectedTheme, callback));
-
-
+        private bool CheckProccessRunning()
+        {
+            Process[] process = Process.GetProcessesByName("7zFM");
+            if (process.Length > 0) 
+                return true; 
+            return false;
         }
 
 
